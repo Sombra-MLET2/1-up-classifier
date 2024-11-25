@@ -1,6 +1,6 @@
 # Delete existing and import dataset
-POST http://localhost:8000/datasets/import
+POST http://localhost:8000/api/datasets/import
 ###
 
 # Delete existing
-DELETE http://localhost:8000/datasets/import
+DELETE http://localhost:8000/api/datasets/import

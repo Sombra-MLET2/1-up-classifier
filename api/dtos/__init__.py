@@ -7,13 +7,13 @@ from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEn
 
 
 class MushroomDTO(BaseModel):
-    id: int
-    mushroom_class: ClassEnum
+    id: int | None = None
+    mushroom_class: Optional[ClassEnum] = None
     cap_diameter: float
-    cap_shape: CapShapeEnum
-    cap_surface: CapSurfaceEnum
-    cap_color: CapColorEnum
-    does_bruise_bleed: DoesBruiseBleedEnum
+    cap_shape: Optional[CapShapeEnum] = None
+    cap_surface: Optional[CapSurfaceEnum] = None
+    cap_color: Optional[CapColorEnum] = None
+    does_bruise_bleed: Optional[DoesBruiseBleedEnum] = None
     gill_attachment: Optional[GillAttachmentEnum] = None
     gill_spacing: Optional[GillSpacingEnum] = None
     gill_color: Optional[CapColorEnum] = None
@@ -22,14 +22,19 @@ class MushroomDTO(BaseModel):
     stem_root: Optional[StemRootEnum] = None
     stem_surface: Optional[CapSurfaceEnum] = None
     stem_color: Optional[CapColorEnum] = None
-    veil_type: VeilTypeEnum
+    veil_type: Optional[VeilTypeEnum] = None
     veil_color: Optional[CapColorEnum] = None
-    has_ring: DoesBruiseBleedEnum
+    has_ring: Optional[DoesBruiseBleedEnum] = None
     ring_type: Optional[RingTypeEnum] = None
     spore_print_color: Optional[CapColorEnum] = None
-    habitat: HabitatEnum
-    season: SeasonEnum
+    habitat: Optional[HabitatEnum] = None
+    season: Optional[SeasonEnum] = None
     user: Optional[str] = Field(None, max_length=50)
 
     class Config:
         use_enum_values = True
+        from_attributes = True
+
+
+class MushroomDeleteRequest(BaseModel):
+    ids: list[int]
