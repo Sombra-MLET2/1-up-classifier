@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEnum, DoesBruiseBleedEnum, \
     GillAttachmentEnum, GillSpacingEnum, StemRootEnum, VeilTypeEnum, RingTypeEnum, HabitatEnum, SeasonEnum
 
-
+# Mushrooms
 class MushroomDTO(BaseModel):
     id: int | None = None
     mushroom_class: Optional[ClassEnum] = None
@@ -38,3 +38,17 @@ class MushroomDTO(BaseModel):
 
 class MushroomDeleteRequest(BaseModel):
     ids: list[int]
+
+
+class MushroomPageResponse(BaseModel):
+    total: int
+    page: int
+    data: list[MushroomDTO]
+
+class MushroomSimpleResponse(BaseModel):
+    message: str | None = None
+
+
+# Datasets
+class DatasetResponse(BaseModel):
+    message: str | None = None

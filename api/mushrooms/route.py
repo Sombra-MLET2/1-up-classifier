@@ -1,15 +1,16 @@
-from typing import List
+from typing import List, Union
 
 from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse, Response
 
-from api.dtos import MushroomDTO, MushroomDeleteRequest
+from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse
 from api.infra.database import get_db
 from api.mushrooms.create_mushroom import save_mushroom
 from api.mushrooms.delete_mushrooms import delete_mushrooms
 from api.mushrooms.list_mushrooms import list_all_mushrooms
+
 
 mushrooms_router = APIRouter(
     prefix="/mushrooms",
@@ -20,22 +21,26 @@ mushrooms_router = APIRouter(
 )
 
 
-@mushrooms_router.get("/")
+@mushrooms_router.get("/",
+                      summary="List all mushrooms",
+                      response_model=Union[MushroomPageResponse])
 async def list_mushrooms(db_con: Session = Depends(get_db)):
     mushrooms = list_all_mushrooms(db_con)
 
     if not mushrooms:
         return Response(status_code=204, content=None)
 
-    return JSONResponse(status_code=200, content={
-        'total': len(mushrooms),
-        'page': 1,
-        'data': _serialize_mushrooms(mushrooms)
-    })
+    page = MushroomPageResponse(
+        total=len(mushrooms),
+        page=1,
+        data=mushrooms)
+
+    return page
 
 
-
-@mushrooms_router.post("/")
+@mushrooms_router.post("/",
+                      summary="Create a mushroom based on user input",
+                      response_model=MushroomSimpleResponse)
 async def create_mushroom(dto: MushroomDTO, db_con: Session = Depends(get_db)):
     save_mushroom(
         db_con,
@@ -46,7 +51,9 @@ async def create_mushroom(dto: MushroomDTO, db_con: Session = Depends(get_db)):
     )
 
 
-@mushrooms_router.delete("/")
+@mushrooms_router.delete("/",
+                      summary="Delete one or more mushrooms based on the ids provided",
+                      response_model=MushroomSimpleResponse)
 async def delete_mushroom(request: MushroomDeleteRequest, user: str = "abc", db_con: Session = Depends(get_db)):
     deleted = delete_mushrooms(db_con, user, request)
 

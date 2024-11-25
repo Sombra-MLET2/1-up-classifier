@@ -6,6 +6,7 @@ from starlette.responses import JSONResponse
 
 from api.datasets.delete_uci_data import delete_uci_data
 from api.datasets.import_from_uci import import_from_uci
+from api.dtos import DatasetResponse
 from api.infra.database import get_db
 
 datasets_router = APIRouter(
@@ -20,7 +21,10 @@ datasets_router = APIRouter(
 logger = logging.getLogger(__name__)
 
 
-@datasets_router.post("/import")
+@datasets_router.post("/import",
+                      summary="Import data from UCI dataset",
+                      description="Data from UCI Mushroom dataset is imported as initial state by a special user named uci_import",
+                      response_model=DatasetResponse)
 async def import_uci_mushrooms(db: Session = Depends(get_db)):
     inserted = await import_from_uci(db)
 
@@ -28,7 +32,10 @@ async def import_uci_mushrooms(db: Session = Depends(get_db)):
         status_code=201,
         content={"message": f"Imported {inserted} records from UCI datasource"})
 
-@datasets_router.delete("/import")
+@datasets_router.delete("/import",
+                      summary="Delete data created from UCI dataset",
+                      description="Data imported from UCI Mushroom dataset is deleted if its user is named uci_import",
+                      response_model=DatasetResponse)
 async def delete_uci_mushrooms(db: Session = Depends(get_db)):
     inserted = await delete_uci_data(db)
 

@@ -17,7 +17,9 @@ app.include_router(mushrooms_router)
 Base.metadata.create_all(bind=engine)
 
 
-@app.get("/")
+@app.get("/",
+         tags=["tech-challenge"],
+         summary="Team & Project Info")
 async def root():
     return {
         "FIAP": {
