@@ -1,51 +1,9 @@
-import logging
-
 import pandas as pd
-from fastapi import HTTPException
-from sqlalchemy.orm import Session
-from ucimlrepo import fetch_ucirepo
 
 from api.infra.loggers import logger
-from api.models.enums import ClassEnum, CapShapeEnum, CapColorEnum, CapSurfaceEnum, DoesBruiseBleedEnum, \
+from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEnum, DoesBruiseBleedEnum, \
     GillAttachmentEnum, GillSpacingEnum, StemRootEnum, VeilTypeEnum, RingTypeEnum, HabitatEnum, SeasonEnum
 from api.models.mushroom import Mushroom
-from api.repositories.mushroom_repository import delete_uci_mushrooms, save_mushrooms
-
-
-async def import_from_uci(db_con: Session) -> int:
-    delete_uci_mushrooms(db_con)
-
-    secondary_mushroom = fetch_ucirepo(id=848)
-
-    X = secondary_mushroom.data.features
-    y = secondary_mushroom.data.targets
-
-    logger.info(f"Importing {X.shape[0]} records from UCI repository with {X.shape[1]} features...")
-
-    try:
-        mushrooms = []
-
-        for index, row in X.iterrows():
-            try:
-                mushrooms.append(_map_row_to_mushroom(row, y.iloc[index]['class']))
-            except Exception as e:
-                logger.error(f"Mapping failed for record id {index}: {e}")
-
-        save_mushrooms(db_con, mushrooms)
-
-        inserted = len(mushrooms)
-
-        logging.info(f"Inserted {inserted} records into the mushrooms table from UCI repository")
-
-        return inserted
-    except Exception as e:
-        db_con.rollback()
-
-        logger.error(f"Failed to import data from UCI repository: {e}")
-
-        raise HTTPException(
-            status_code=500,
-            detail="An error occurred while importing data from UCI repository")
 
 
 def _handle_enum_field(row, mush_enum, field):
@@ -67,7 +25,7 @@ def _enum_provided(value):
     return True
 
 
-def _map_row_to_mushroom(row, target=None):
+def map_row_to_mushroom(row, target=None):
     return Mushroom(
         mushroom_class=ClassEnum(target),
         cap_diameter=float(row["cap-diameter"]),
