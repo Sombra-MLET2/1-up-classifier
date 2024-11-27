@@ -15,9 +15,8 @@ def save(db_con: Session, dto: MushroomDTO):
     db_con.commit()
 
 
-def find_mushrooms(db_con: Session):
-    return db_con.query(Mushroom).order_by(
-        Mushroom.created_at).all()
+def find_mushrooms(db_con: Session, page, size):
+    return db_con.query(Mushroom).order_by(Mushroom.created_at).offset(page).limit(size)
 
 
 def save_mushrooms(db_con: Session, mushrooms: list[Mushroom]):

@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 import api.infra.configs as configs
 from api.datasets.route import datasets_router
@@ -10,6 +11,15 @@ from api.mushrooms.route import mushrooms_router
 logging.info(f"*** 1-Up Mushroom Safety Classifier - API running on {configs.ENV} environment ***")
 
 app = FastAPI(root_path="/api")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:3000'],  # Allows specific origins
+    allow_credentials=True,  # Allows cookies to be sent
+    allow_methods=["*"],  # Allows all methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+
 app.include_router(datasets_router)
 app.include_router(mushrooms_router)
 
