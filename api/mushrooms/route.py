@@ -1,16 +1,16 @@
-from typing import List, Union
+from typing import List, Union, Annotated
 
 from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse, Response
 
-from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse
+from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse, User
 from api.infra.database import get_db
+from api.infra.security import get_current_active_user
 from api.mushrooms.create_mushroom import save_mushroom
 from api.mushrooms.delete_mushrooms import delete_mushrooms
 from api.mushrooms.list_mushrooms import list_all_mushrooms
-
 
 mushrooms_router = APIRouter(
     prefix="/mushrooms",
@@ -28,7 +28,10 @@ async def list_mushrooms(db_con: Session = Depends(get_db)):
     mushrooms = list_all_mushrooms(db_con)
 
     if not mushrooms:
-        return Response(status_code=204, content=None)
+        return MushroomPageResponse(
+            total=0,
+            page=1,
+            data=[])
 
     page = MushroomPageResponse(
         total=len(mushrooms),
@@ -39,9 +42,12 @@ async def list_mushrooms(db_con: Session = Depends(get_db)):
 
 
 @mushrooms_router.post("/",
-                      summary="Create a mushroom based on user input",
-                      response_model=MushroomSimpleResponse)
-async def create_mushroom(dto: MushroomDTO, db_con: Session = Depends(get_db)):
+                       summary="Create a mushroom based on user input",
+                       response_model=MushroomSimpleResponse)
+async def create_mushroom(dto: MushroomDTO, current_user: Annotated[User, Depends(get_current_active_user)],
+                          db_con: Session = Depends(get_db)):
+    dto.user = current_user.email
+
     save_mushroom(
         db_con,
         dto)
@@ -52,8 +58,8 @@ async def create_mushroom(dto: MushroomDTO, db_con: Session = Depends(get_db)):
 
 
 @mushrooms_router.delete("/",
-                      summary="Delete one or more mushrooms based on the ids provided",
-                      response_model=MushroomSimpleResponse)
+                         summary="Delete one or more mushrooms based on the ids provided",
+                         response_model=MushroomSimpleResponse)
 async def delete_mushroom(request: MushroomDeleteRequest, user: str = "abc", db_con: Session = Depends(get_db)):
     deleted = delete_mushrooms(db_con, user, request)
 

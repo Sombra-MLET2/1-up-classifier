@@ -8,9 +8,11 @@ Content-Type: application/json
 {
   "ids": [2]
 }
+
 ###
 POST http://localhost:8000/api/mushrooms
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbGljZUBleGFtcGxlLmNvbSIsImV4cCI6MTczMjc0NjE1OX0.cTfdeuMEXNnDATNBXtE3aExFSbBNW0HmAhKVDIgo8ME
 
 {
   "mushroom_class": "e",
@@ -33,6 +35,5 @@ Content-Type: application/json
   "ring_type": "p",
   "spore_print_color": "o",
   "habitat": "w",
-  "season": "u",
-  "user": "mycology_expert"
+  "season": "u"
 }

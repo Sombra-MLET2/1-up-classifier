@@ -1,0 +1,18 @@
+POST http://localhost:8000/api/sessions/
+accept: application/json
+Content-Type: application/json
+
+{
+  "email": "bob@example.com",
+  "password": "bob123"
+}
+
+###
+POST http://localhost:8000/api/sessions/api-token
+accept: application/json
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "alice123"
+}
