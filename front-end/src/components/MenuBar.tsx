@@ -5,10 +5,18 @@ import {Link} from 'react-router-dom';
 
 // @ts-ignore
 import Logo from '../assets/1up.png';
+import LoadingModal from "./LoadingModal";
+import {useDispatch} from "react-redux";
+import {deleteDataset, importDataset} from "../redux/slices/datasetSliceReducer";
+import {AppDispatch} from "../redux/storeInitializer";
+import {MushroomDTO} from "../types/mushroom";
+import {fetchMushrooms} from "../redux/slices/mushroomSliceReducer";
 
 const MenuBar: React.FC = () => {
     const [anchorElDataset, setAnchorElDataset] = useState<null | HTMLElement>(null);
     const [anchorElMushrooms, setAnchorElMushrooms] = useState<null | HTMLElement>(null);
+    const [queryParams, setQueryParams] = useState<Partial<MushroomDTO>>({});
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, menu: string) => {
         if (menu === 'dataset') {
@@ -21,10 +29,23 @@ const MenuBar: React.FC = () => {
     const handleMenuClose = () => {
         setAnchorElDataset(null);
         setAnchorElMushrooms(null);
+        dispatch(fetchMushrooms(queryParams));
+    };
+
+    const handleImport = () => {
+        dispatch(importDataset());
+        handleMenuClose();
+        dispatch(fetchMushrooms(queryParams));
+    };
+
+    const handleDelete = () => {
+        dispatch(deleteDataset());
+        handleMenuClose()
     };
 
     return (
         <AppBar position="static">
+            <LoadingModal/>
             <Toolbar>
                 <Box sx={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
                     <img src={Logo} alt="Logo" style={{maxWidth: '50px', maxHeight: '50px', marginRight: '10px'}}/>
@@ -49,8 +70,8 @@ const MenuBar: React.FC = () => {
                         open={Boolean(anchorElDataset)}
                         onClose={handleMenuClose}
                     >
-                        <MenuItem onClick={handleMenuClose} component={Link} to="/import">Import</MenuItem>
-                        <MenuItem onClick={handleMenuClose} component={Link} to="/delete">Delete</MenuItem>
+                        <MenuItem onClick={handleImport}>Import</MenuItem>
+                        <MenuItem onClick={handleDelete}>Delete</MenuItem>
                     </Menu>
                     <Button
                         aria-controls="mushrooms-menu"
