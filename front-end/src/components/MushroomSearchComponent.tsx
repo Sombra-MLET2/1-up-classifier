@@ -200,6 +200,9 @@ const MushroomSearch: React.FC = () => {
                         Search
                     </Button>
                 </Box>
+                <Box sx={{display: 'flex', justifyContent: 'right', marginBottom: 2}}>
+                    Mushroom(s) found: {mushrooms?.data?.length}
+                </Box>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
