@@ -5,7 +5,8 @@ from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse, Response
 
-from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse, User
+from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse, User, \
+    MushroomSearchRequest
 from api.infra.database import get_db
 from api.infra.security import get_current_active_user
 from api.mushrooms.create_mushroom import save_mushroom
@@ -24,8 +25,8 @@ mushrooms_router = APIRouter(
 @mushrooms_router.get("/",
                       summary="List all mushrooms",
                       response_model=Union[MushroomPageResponse])
-async def list_mushrooms(db_con: Session = Depends(get_db)):
-    mushrooms = list_all_mushrooms(db_con)
+async def list_mushrooms(params: MushroomSearchRequest = Depends(), db_con: Session = Depends(get_db)):
+    mushrooms = list_all_mushrooms(db_con, params)
 
     if not mushrooms:
         return MushroomPageResponse(

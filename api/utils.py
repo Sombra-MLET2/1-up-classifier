@@ -10,14 +10,14 @@ from api.models.mushroom import Mushroom
 def _handle_row_enum_field(row, mush_enum, field):
     value = row[field]
 
-    return _prepare_enum(mush_enum, value)
+    return prepare_enum(mush_enum, value)
 
 
 def _handle_dto_enum_field(value, mush_enum):
-    return _prepare_enum(mush_enum, value)
+    return prepare_enum(mush_enum, value)
 
 
-def _prepare_enum(mush_enum, value):
+def prepare_enum(mush_enum, value):
     if _enum_provided(value):
         if value.strip() not in mush_enum:
             logger.warn(f"Invalid enum value {value} for {mush_enum}")

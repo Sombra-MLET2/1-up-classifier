@@ -48,6 +48,15 @@ class MushroomPageResponse(BaseModel):
 class MushroomSimpleResponse(BaseModel):
     message: str | None = None
 
+class MushroomSearchRequest(BaseModel):
+    mushroom_class: Optional[str] = None
+    cap_shape: Optional[str] = None
+    cap_surface: Optional[str] = None
+    veil: Optional[str] = None
+    habitat: Optional[str] = None
+    cap_color: Optional[str] = None
+    gill: Optional[str] = None
+    season: Optional[str] = None
 
 # Datasets
 class DatasetResponse(BaseModel):

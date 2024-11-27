@@ -2,9 +2,11 @@ import logging
 
 from sqlalchemy.orm import Session
 
-from api.dtos import MushroomDTO
+from api.dtos import MushroomDTO, MushroomSearchRequest
+from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEnum, VeilTypeEnum, HabitatEnum, \
+    GillAttachmentEnum, SeasonEnum
 from api.models.mushroom import Mushroom
-from api.utils import map_dto_to_mushroom
+from api.utils import map_dto_to_mushroom, prepare_enum
 
 
 def save(db_con: Session, dto: MushroomDTO):
@@ -15,8 +17,27 @@ def save(db_con: Session, dto: MushroomDTO):
     db_con.commit()
 
 
-def find_mushrooms(db_con: Session, page, size):
-    return db_con.query(Mushroom).order_by(Mushroom.created_at).offset(page).limit(size)
+def find_mushrooms(db_con: Session, params: MushroomSearchRequest, page, size):
+    query = db_con.query(Mushroom)
+
+    if params.mushroom_class:
+        query = query.where(Mushroom.mushroom_class == prepare_enum(ClassEnum, params.mushroom_class))
+    if params.cap_shape:
+        query = query.where(Mushroom.cap_shape == prepare_enum(CapShapeEnum, params.cap_shape))
+    if params.cap_surface:
+        query = query.where(Mushroom.cap_surface == prepare_enum(CapSurfaceEnum, params.cap_surface))
+    if params.cap_color:
+        query = query.where(Mushroom.cap_color == prepare_enum(CapColorEnum, params.cap_color))
+    if params.veil:
+        query = query.where(Mushroom.veil_type == prepare_enum(VeilTypeEnum, params.veil))
+    if params.habitat:
+        query = query.where(Mushroom.habitat == prepare_enum(HabitatEnum, params.habitat))
+    if params.gill:
+        query = query.where(Mushroom.gill_attachment == prepare_enum(GillAttachmentEnum, params.gill))
+    if params.season:
+        query = query.where(Mushroom.season == prepare_enum(SeasonEnum, params.season))
+
+    return query.order_by(Mushroom.created_at).offset(page).limit(size)
 
 
 def save_mushrooms(db_con: Session, mushrooms: list[Mushroom]):
