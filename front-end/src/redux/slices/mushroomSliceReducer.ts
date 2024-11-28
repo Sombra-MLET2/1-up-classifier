@@ -5,7 +5,7 @@ import {MushroomDTO, MushroomPageResponse} from "../../types/mushroom";
 
 export interface MushroomState {
     mushrooms: MushroomPageResponse;
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    status: 'idle' | 'loading' | 'succeeded' | 'failed' | 'inserted';
     error: string | null;
 }
 
@@ -25,8 +25,8 @@ export const fetchMushrooms = createAsyncThunk(
 
 export const insertMushroom = createAsyncThunk(
     "mushroom/insertMushroom",
-    async (mushroom: MushroomDTO) => {
-        const response = await mushroomService.insertMushroom(mushroom);
+    async (payload: { mushroom: MushroomDTO, token: string }) => {
+        const response = await mushroomService.insertMushroom(payload.mushroom, payload.token);
         return response.data;
     }
 );
@@ -52,7 +52,7 @@ const mushroomSlice = createSlice({
                 state.status = "loading";
             })
             .addCase(insertMushroom.fulfilled, (state, action) => {
-                state.status = "succeeded";
+                state.status = "inserted";
                 state.mushrooms.data.push(action.payload);
             })
             .addCase(insertMushroom.rejected, (state, action) => {

@@ -46,6 +46,11 @@ export enum DoesBruiseBleedEnum {
     no = "f",
 }
 
+export enum HasRingEnum {
+    yes = "t",
+    no = "f",
+}
+
 export enum GillAttachmentEnum {
     adnate = "a",
     adnexed = "x",
@@ -214,6 +219,10 @@ export class Mushroom implements MushroomDTO {
         return this.getEnumString(VeilTypeEnumToString, this.veil_type!);
     }
 
+    get hasRing(): string {
+        return this.getEnumString(HasRingEnumToString, this.has_ring!);
+    }
+
     get ringType(): string {
         return this.getEnumString(RingTypeEnumToString, this.ring_type!);
     }
@@ -273,6 +282,11 @@ export const CapColorEnumToString: Record<CapColorEnum, string> = {
 export const DoesBruiseBleedEnumToString: Record<DoesBruiseBleedEnum, string> = {
     [DoesBruiseBleedEnum.bruises_or_bleeding]: "Bruises or Bleeding",
     [DoesBruiseBleedEnum.no]: "No",
+};
+
+export const HasRingEnumToString: Record<HasRingEnum, string> = {
+    [HasRingEnum.yes]: "Yes",
+    [HasRingEnum.no]: "No",
 };
 
 export const GillAttachmentEnumToString: Record<GillAttachmentEnum, string> = {
