@@ -104,7 +104,9 @@ const MenuBar: React.FC = () => {
                     >
                         <MenuItem onClick={handleMenuClose} component={Link} to="/search">Search</MenuItem>
                         <MenuItem onClick={handleMenuClose} component={Link} to="/predict">Predict</MenuItem>
-                        <MenuItem onClick={handleMenuClose} component={Link} to="/insert">Insert</MenuItem>
+                        {session.status === 'succeeded' && (
+                            <MenuItem onClick={handleMenuClose} component={Link} to="/insert">Insert</MenuItem>
+                        )}
                     </Menu>
                 </Box>
                 <Box sx={{flexGrow: 1}}/>

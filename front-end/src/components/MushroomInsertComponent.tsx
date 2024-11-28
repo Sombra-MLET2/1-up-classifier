@@ -30,7 +30,7 @@ import mushroom, {
     VeilTypeEnumToString,
     RingTypeEnumToString,
     HabitatEnumToString,
-    SeasonEnumToString, ClassEnum
+    SeasonEnumToString, ClassEnum, ClassEnumToString
 } from '../types/mushroom';
 import MenuBar from "./MenuBar";
 import {useNavigate} from "react-router-dom";
@@ -56,6 +56,7 @@ const MushroomInsert: React.FC = () => {
 
     const handleChange = (e: SelectChangeEvent<unknown>, child: ReactNode) => {
         const {name, value} = e.target;
+        console.log(name, value);
         setNewMushroom(prevState => ({...prevState, [name as string]: value}));
     };
 
@@ -67,7 +68,7 @@ const MushroomInsert: React.FC = () => {
         e.preventDefault();
         dispatch(insertMushroom({
             mushroom: newMushroom as MushroomDTO,
-            token: session.access_token
+            token: session?.access_token
         }));
     };
 
@@ -103,9 +104,13 @@ const MushroomInsert: React.FC = () => {
                         name="mushroom_class"
                         label="Class"
                         onChange={handleChange}
+                        value={newMushroom.mushroom_class || ''}
                     >
-                        <MenuItem value={ClassEnum.poisonous}>Poisonous</MenuItem>
-                        <MenuItem value={ClassEnum.edible}>Edible</MenuItem>
+                        {Object.entries(ClassEnum).map(([key, value]) => (
+                            <MenuItem key={key} value={value}>
+                                {ClassEnumToString[value as ClassEnum]}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
 
@@ -175,7 +180,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="bruise-bleed-label">Bruise or Bleed?</InputLabel>
                     <Select
                         labelId="bruise-bleed-label"
-                        name="bruise-bleed"
+                        name="does_bruise_bleed"
                         onChange={handleChange}
                         value={newMushroom.does_bruise_bleed || ''}
                     >
@@ -191,7 +196,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="gill-attachment-label">Gill Attachment</InputLabel>
                     <Select
                         labelId="gill-attachment-label"
-                        name="gill-attachment"
+                        name="gill_attachment"
                         onChange={handleChange}
                         value={newMushroom.gill_attachment || ''}
                     >
@@ -207,7 +212,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="gill-spacing-label">Gill Spacing</InputLabel>
                     <Select
                         labelId="gill-spacing-label"
-                        name="gill-spacing"
+                        name="gill_spacing"
                         onChange={handleChange}
                         value={newMushroom.gill_spacing || ''}
                     >
@@ -220,26 +225,10 @@ const MushroomInsert: React.FC = () => {
                 </FormControl>
 
                 <FormControl>
-                    <InputLabel id="gill-color-label">Gill Spacing</InputLabel>
+                    <InputLabel id="gill-color-label">Gill Color</InputLabel>
                     <Select
                         labelId="gill-color-label"
-                        name="gill-color"
-                        onChange={handleChange}
-                        value={newMushroom.gill_color || ''}
-                    >
-                        {Object.entries(CapColorEnum).map(([key, value]) => (
-                            <MenuItem key={key} value={value}>
-                                {CapColorEnumToString[value as CapColorEnum]}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <FormControl>
-                    <InputLabel id="gill-color-label">Gill Spacing</InputLabel>
-                    <Select
-                        labelId="gill-color-label"
-                        name="gill-color"
+                        name="gill_color"
                         onChange={handleChange}
                         value={newMushroom.gill_color || ''}
                     >
@@ -283,7 +272,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="stem-root-label">Stem Root</InputLabel>
                     <Select
                         labelId="stem-root-label"
-                        name="stem-root"
+                        name="stem_root"
                         onChange={handleChange}
                         value={newMushroom.stem_root || ''}
                     >
@@ -299,7 +288,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="stem-surface-label">Stem Surface</InputLabel>
                     <Select
                         labelId="stem-surface-label"
-                        name="stem-surface"
+                        name="stem_surface"
                         onChange={handleChange}
                         value={newMushroom.stem_surface || ''}
                     >
@@ -315,7 +304,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="stem-color-label">Stem Color</InputLabel>
                     <Select
                         labelId="stem-color-label"
-                        name="stem-color"
+                        name="stem_color"
                         onChange={handleChange}
                         value={newMushroom.stem_color || ''}
                     >
@@ -331,7 +320,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="veil-type-label">Veil Type</InputLabel>
                     <Select
                         labelId="veil-type-label"
-                        name="veil-type"
+                        name="veil_type"
                         onChange={handleChange}
                         value={newMushroom.veil_type || ''}
                     >
@@ -347,7 +336,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="veil-color-label">Veil Color</InputLabel>
                     <Select
                         labelId="veil-color-label"
-                        name="veil-color"
+                        name="veil_color"
                         onChange={handleChange}
                         value={newMushroom.veil_color || ''}
                     >
@@ -363,7 +352,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="has-ring-label">Has Ring?</InputLabel>
                     <Select
                         labelId="has-ring-label"
-                        name="has-ring"
+                        name="has_ring"
                         onChange={handleChange}
                         value={newMushroom.has_ring || ''}
                     >
@@ -379,7 +368,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="ring-type-label">Ring Type</InputLabel>
                     <Select
                         labelId="ring-type-label"
-                        name="ring-type"
+                        name="ring_type"
                         onChange={handleChange}
                         value={newMushroom.ring_type || ''}
                     >
@@ -395,7 +384,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="spore-print-color-label">Spore Print Color</InputLabel>
                     <Select
                         labelId="spore-print-color-label"
-                        name="spore-print-color"
+                        name="spore_print_color"
                         onChange={handleChange}
                         value={newMushroom.spore_print_color || ''}
                     >
@@ -411,7 +400,7 @@ const MushroomInsert: React.FC = () => {
                     <InputLabel id="habitat-name-label">Habitat</InputLabel>
                     <Select
                         labelId="habitat-name-label"
-                        name="habitat-name"
+                        name="habitat"
                         onChange={handleChange}
                         value={newMushroom.habitat || ''}
                     >
