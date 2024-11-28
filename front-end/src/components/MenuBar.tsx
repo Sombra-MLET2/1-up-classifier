@@ -1,22 +1,26 @@
 import React from 'react';
 import {AppBar, Toolbar, Typography, Menu, MenuItem, Button, Box} from '@mui/material';
 import {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 // @ts-ignore
 import Logo from '../assets/1up.png';
 import LoadingModal from "./LoadingModal";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {deleteDataset, importDataset} from "../redux/slices/datasetSliceReducer";
-import {AppDispatch} from "../redux/storeInitializer";
+import {AppDispatch, RootState} from "../redux/storeInitializer";
 import {MushroomDTO} from "../types/mushroom";
 import {fetchMushrooms} from "../redux/slices/mushroomSliceReducer";
+import {logoff} from "../redux/slices/sessionSliceReducer";
 
 const MenuBar: React.FC = () => {
     const [anchorElDataset, setAnchorElDataset] = useState<null | HTMLElement>(null);
     const [anchorElMushrooms, setAnchorElMushrooms] = useState<null | HTMLElement>(null);
     const [queryParams, setQueryParams] = useState<Partial<MushroomDTO>>({});
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    const session = useSelector((state: RootState) => state.session);
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, menu: string) => {
         if (menu === 'dataset') {
@@ -33,15 +37,20 @@ const MenuBar: React.FC = () => {
     };
 
     const handleImport = () => {
-        dispatch(importDataset());
+        dispatch(importDataset(session.user?.access_token));
         handleMenuClose();
         dispatch(fetchMushrooms(queryParams));
     };
 
     const handleDelete = () => {
-        dispatch(deleteDataset());
+        dispatch(deleteDataset(session.user?.access_token));
         handleMenuClose()
     };
+
+    const handleLogoff = () => {
+        dispatch(logoff());
+        navigate('/', {replace: true});
+    }
 
     return (
         <AppBar position="static">
@@ -55,24 +64,28 @@ const MenuBar: React.FC = () => {
                 </Box>
 
                 <Box sx={{display: 'flex', alignItems: 'center', paddingLeft: '50px'}}>
-                    <Button
-                        aria-controls="dataset-menu"
-                        aria-haspopup="true"
-                        onClick={(event) => handleMenuOpen(event, 'dataset')}
-                        color="inherit"
-                    >
-                        Dataset
-                    </Button>
-                    <Menu
-                        id="dataset-menu"
-                        anchorEl={anchorElDataset}
-                        keepMounted
-                        open={Boolean(anchorElDataset)}
-                        onClose={handleMenuClose}
-                    >
-                        <MenuItem onClick={handleImport}>Import</MenuItem>
-                        <MenuItem onClick={handleDelete}>Delete</MenuItem>
-                    </Menu>
+                    {session.status === 'succeeded' && (
+                        <>
+                            <Button
+                                aria-controls="dataset-menu"
+                                aria-haspopup="true"
+                                onClick={(event) => handleMenuOpen(event, 'dataset')}
+                                color="inherit"
+                            >
+                                Dataset
+                            </Button>
+                            <Menu
+                                id="dataset-menu"
+                                anchorEl={anchorElDataset}
+                                keepMounted
+                                open={Boolean(anchorElDataset)}
+                                onClose={handleMenuClose}
+                            >
+                                <MenuItem onClick={handleImport}>Import</MenuItem>
+                                <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                            </Menu>
+                        </>
+                    )}
                     <Button
                         aria-controls="mushrooms-menu"
                         aria-haspopup="true"
@@ -96,7 +109,7 @@ const MenuBar: React.FC = () => {
                 </Box>
                 <Box sx={{flexGrow: 1}}/>
                 <Box>
-                    <Button color="inherit">Logoff</Button>
+                    <Button color="inherit" onClick={handleLogoff}>Logoff</Button>
                 </Box>
             </Toolbar>
         </AppBar>

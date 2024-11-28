@@ -15,16 +15,16 @@ const initialState: DatasetState = {
 
 export const importDataset = createAsyncThunk(
   'dataset/import',
-  async (): Promise<{ message: string }> => {
-    const response = await dsServices.importDataset()
+  async (token: string): Promise<{ message: string }> => {
+    const response = await dsServices.importDataset(token)
     return response.data;
   }
 );
 
 export const deleteDataset = createAsyncThunk(
   'dataset/delete',
-  async (): Promise<{ message: string }> => {
-    const response = await dsServices.deleteDataset();
+  async (token: string): Promise<{ message: string }> => {
+    const response = await dsServices.deleteDataset(token);
     return response.data;
   }
 );
