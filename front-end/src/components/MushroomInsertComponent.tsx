@@ -1,7 +1,7 @@
 import React, {useState, FormEvent, ReactNode, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-    Box, TextField, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slider, Alert
+    Box, TextField, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slider, Alert, Typography
 } from '@mui/material';
 import {insertMushroom} from '../redux/slices/mushroomSliceReducer';
 import {AppDispatch, RootState} from '../redux/storeInitializer';
@@ -74,6 +74,9 @@ const MushroomInsert: React.FC = () => {
     return (
         <>
             <MenuBar/>
+            <Typography variant="h4" component="h1" align="center" gutterBottom>
+                Mushroom Register
+            </Typography>
             <Box sx={{display: 'flex', alignItems: 'center', marginBottom: '20px'}}>
                 {addedMushroom === 'failed' && (
                     <Alert severity='error'>Mushroom creation failed. Please, try again later.</Alert>
@@ -94,17 +97,17 @@ const MushroomInsert: React.FC = () => {
             >
 
                 <FormControl>
-                        <InputLabel id="mushroom-class-label">Class</InputLabel>
-                        <Select
-                            labelId="mushroom-class-label"
-                            name="mushroom_class"
-                            label="Class"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={ClassEnum.poisonous}>Poisonous</MenuItem>
-                            <MenuItem value={ClassEnum.edible}>Edible</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <InputLabel id="mushroom-class-label">Class</InputLabel>
+                    <Select
+                        labelId="mushroom-class-label"
+                        name="mushroom_class"
+                        label="Class"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value={ClassEnum.poisonous}>Poisonous</MenuItem>
+                        <MenuItem value={ClassEnum.edible}>Edible</MenuItem>
+                    </Select>
+                </FormControl>
 
                 <FormControl sx={{m: 1}}>
                     <InputLabel id="cap-diameter-slider-label">Cap Diameter ({newMushroom.cap_diameter} cm)</InputLabel>

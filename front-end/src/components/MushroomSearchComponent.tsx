@@ -13,7 +13,7 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow, Typography
 } from '@mui/material';
 import {fetchMushrooms} from '../redux/slices/mushroomSliceReducer';
 import {AppDispatch, RootState} from '../redux/storeInitializer';
@@ -61,6 +61,9 @@ const MushroomSearch: React.FC = () => {
     return (
         <>
             <MenuBar/>
+            <Typography variant="h4" component="h1" align="center" gutterBottom>
+                Mushroom Search
+            </Typography>
             <Box>
                 <Box
                     component="form"

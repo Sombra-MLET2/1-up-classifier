@@ -5,6 +5,7 @@ import MushroomSearch from './components/MushroomSearchComponent';
 import MushroomInsert from './components/MushroomInsertComponent';
 import {Provider} from 'react-redux';
 import store from './redux/storeInitializer';
+import MushroomPredict from "./components/MushroomPredictComponent";
 
 const App: React.FC = () => {
     return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<Login/>}/>
                     <Route path="/search" element={<MushroomSearch/>}/>
                     <Route path="/insert" element={<MushroomInsert/>}/>
+                    <Route path="/predict" element={<MushroomPredict/>}/>
                 </Routes>
             </Router>
         </Provider>
