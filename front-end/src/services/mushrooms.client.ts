@@ -2,14 +2,17 @@ import axios from 'axios';
 import {MushroomDTO} from "../types/mushroom";
 
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const fetchMushrooms = async (queryParams: Partial<MushroomDTO>) => {
-    return await axios.get('http://localhost:8000/api/mushrooms/', {
+    return await axios.get(`${API_URL}/mushrooms/`, {
         params: queryParams,
     });
 };
 
 const insertMushroom = async (mushroom: MushroomDTO, token: string) => {
-    return await axios.post('http://localhost:8000/api/mushrooms/', mushroom, {
+    return await axios.post(`${API_URL}/mushrooms/`, mushroom, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
