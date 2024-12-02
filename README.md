@@ -93,6 +93,31 @@ To run the project, you'll need node 22+ and install the dependencies.
    npm start
 ```
 
+## Docker-Compose Environment
+
+Execute the `build-compose.sh` to build the whole environment(FE + BE) with reverse proxy:
+
+```bash
+   cd deployment/
+   ./build-compose.sh
+```
+
+This script will:
+1. Destroy the current compose environment, if any.
+2. Build Front-end image
+3. Build Back-end image
+4. Create the compose environment
+
+The application will be available via http://localhost:3001/.
+
+Initial user configuration can be arranged via http://localhost:3001/docs#/sessions/add_user_sessions__post
+```json
+{
+  "email": "alice@mail.com",
+  "password": "alice123"
+}
+```
+
 ## Main Features
 
 1. **Mushroom Type Prediction:**

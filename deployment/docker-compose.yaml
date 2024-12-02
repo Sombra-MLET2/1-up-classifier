@@ -1,0 +1,23 @@
+services:
+  frontend:
+    image: sombra/mushroom-front:latest
+    ports:
+      - "3001:80"
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+    networks:
+      - mycelium
+
+  backend:
+    image: sombra/mushroom-back:latest
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - mycelium
+
+networks:
+  mycelium :
