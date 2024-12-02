@@ -73,6 +73,11 @@ To set up the project, you'll need to configure a Python 3.12 virtual environmen
    - `JWT_SECRET` (required)
    - `JWT_EXPIRY` (optional, default: `30`)
 
+5. Running the Backend from root folder
+   ```bash
+   fastapi run api/main.py
+   ```     
+
 ## Main Features
 
 1. **Mushroom Type Prediction:**
