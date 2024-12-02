@@ -77,6 +77,21 @@ To set up the project, you'll need to configure a Python 3.12 virtual environmen
    ```bash
    fastapi run api/main.py
    ```     
+   
+### Configuration - Frontend
+
+To run the project, you'll need node 22+ and install the dependencies.
+
+1. **Install dependencies:**
+```bash
+   cd front-end/
+   npm install
+```
+
+2. **Run the Project:**
+```bash
+   npm start
+```
 
 ## Main Features
 
