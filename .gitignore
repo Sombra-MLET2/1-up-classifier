@@ -1,4 +1,5 @@
 .idea/
+.vs/
 *.db
 **/__pycache__/
 
