@@ -1,10 +1,8 @@
 from typing import List, Union, Annotated
-
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
-from starlette.responses import JSONResponse, Response
-
+from starlette.responses import JSONResponse
 from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse, User, \
     MushroomSearchRequest
 from api.infra.database import get_db
@@ -12,6 +10,7 @@ from api.infra.security import get_current_active_user
 from api.mushrooms.create_mushroom import save_mushroom
 from api.mushrooms.delete_mushrooms import delete_mushrooms
 from api.mushrooms.list_mushrooms import list_all_mushrooms
+from api.mushrooms.predict_mushroom import predict_mushroom_by_id
 
 mushrooms_router = APIRouter(
     prefix="/mushrooms",
@@ -71,3 +70,12 @@ async def delete_mushroom(request: MushroomDeleteRequest, user: str = "abc", db_
 
 def _serialize_mushrooms(mushrooms: List[MushroomDTO]) -> List[dict]:
     return [mushroom.__dict__ for mushroom in mushrooms]
+
+
+@mushrooms_router.post(path="/predict/", summary="predict")
+async def predict(mushroom_id: int, db_con: Session = Depends(get_db)):
+    return predict_mushroom_by_id(db_con, mushroom_id)
+    #try:
+    #    return predict_mushroom_by_id(db_con, mushroom_id)
+    #except Exception as e:
+    #    raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")

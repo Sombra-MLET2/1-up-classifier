@@ -1,9 +1,8 @@
 from typing import Optional
-
 from pydantic import BaseModel, Field, EmailStr, PositiveInt
-
 from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEnum, DoesBruiseBleedEnum, \
     GillAttachmentEnum, GillSpacingEnum, StemRootEnum, VeilTypeEnum, RingTypeEnum, HabitatEnum, SeasonEnum
+
 
 # Mushrooms
 class MushroomDTO(BaseModel):
@@ -45,8 +44,10 @@ class MushroomPageResponse(BaseModel):
     page: int
     data: list[MushroomDTO]
 
+
 class MushroomSimpleResponse(BaseModel):
     message: str | None = None
+
 
 class MushroomSearchRequest(BaseModel):
     mushroom_class: Optional[str] = None
@@ -58,14 +59,17 @@ class MushroomSearchRequest(BaseModel):
     gill: Optional[str] = None
     season: Optional[str] = None
 
+
 # Datasets
 class DatasetResponse(BaseModel):
     message: str | None = None
+
 
 # Sessions
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class User(BaseModel):
     id: PositiveInt | None = Field(None, gt=0)
@@ -73,6 +77,7 @@ class User(BaseModel):
     password: str | None = None
     hashed_password: str | None = None
     is_active: bool | None = True
+
 
 class TokenData(BaseModel):
     email: str

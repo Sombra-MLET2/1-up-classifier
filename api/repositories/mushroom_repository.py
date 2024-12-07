@@ -1,13 +1,11 @@
 import logging
-
-from sqlalchemy.orm import Session
-
+from sqlalchemy.orm import Session, Query
 from api.dtos import MushroomDTO, MushroomSearchRequest
 from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEnum, VeilTypeEnum, HabitatEnum, \
     GillAttachmentEnum, SeasonEnum
 from api.models.mushroom import Mushroom
 from api.utils import map_dto_to_mushroom, prepare_enum
-
+import pandas as pd
 
 def save(db_con: Session, dto: MushroomDTO):
     logging.info(dto)
@@ -15,6 +13,11 @@ def save(db_con: Session, dto: MushroomDTO):
     logging.info(mushroom)
     db_con.add(mushroom)
     db_con.commit()
+
+
+def df_find_mushrooms_by_id(db_con: Session, id: int) -> pd.DataFrame:
+    query = db_con.query(Mushroom).statement.where(Mushroom.id == id)
+    return pd.read_sql(query, db_con.bind)
 
 
 def find_mushrooms(db_con: Session, params: MushroomSearchRequest, page, size):
