@@ -56,7 +56,6 @@ const MushroomInsert: React.FC = () => {
 
     const handleChange = (e: SelectChangeEvent<unknown>, child: ReactNode) => {
         const {name, value} = e.target;
-        console.log(name, value);
         setNewMushroom(prevState => ({...prevState, [name as string]: value}));
     };
 
