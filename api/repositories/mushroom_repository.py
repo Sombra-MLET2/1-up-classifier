@@ -7,6 +7,7 @@ from api.models.mushroom import Mushroom
 from api.utils import map_dto_to_mushroom, prepare_enum
 import pandas as pd
 
+
 def save(db_con: Session, dto: MushroomDTO):
     logging.info(dto)
     mushroom = map_dto_to_mushroom(dto)
@@ -17,6 +18,11 @@ def save(db_con: Session, dto: MushroomDTO):
 
 def df_find_mushrooms_by_id(db_con: Session, id: int) -> pd.DataFrame:
     query = db_con.query(Mushroom).statement.where(Mushroom.id == id)
+    return pd.read_sql(query, db_con.bind)
+
+
+def df_find_all_mushrooms(db_con: Session) -> pd.DataFrame:
+    query = db_con.query(Mushroom).statement
     return pd.read_sql(query, db_con.bind)
 
 
