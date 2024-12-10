@@ -2,6 +2,8 @@ import joblib
 import pandas as pd
 from enum import Enum
 from sqlalchemy.orm import Session
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from sklearn.impute import SimpleImputer
 from api.repositories.mushroom_repository import df_find_mushrooms_by_id, df_find_all_mushrooms
 from sklearn.ensemble import RandomForestClassifier
 
@@ -30,14 +32,14 @@ def predict(mushroom: pd.DataFrame):
 
 
 def load_model() -> RandomForestClassifier:
-    return joblib.load("ml-models/model/Model_Random_Forest.sav")
+    return joblib.load("ml-models/model/Model_Random_Forest.gz")
 
 
 def pre_processor(mushroom: pd.DataFrame) -> pd.DataFrame:
-    imputer = joblib.load("ml-models/transform/Imputer.sav")
-    label_encoder = joblib.load("ml-models/transform/LabelEncoder.sav")
-    cat_scaler = joblib.load("ml-models/transform/CatScaler.sav")
-    num_scaler = joblib.load("ml-models/transform/NumScaler.sav")
+    imputer: SimpleImputer = joblib.load("ml-models/transform/Imputer.gz")
+    label_encoder: [] = joblib.load("ml-models/transform/LabelEncoder.gz")
+    cat_scaler: MinMaxScaler = joblib.load("ml-models/transform/CatScaler.gz")
+    num_scaler = joblib.load("ml-models/transform/NumScaler.gz")
 
     mushroom.drop(columns=drop_cols, inplace=True)
     mushroom.rename(columns=rename_cols, inplace=True)
@@ -48,9 +50,10 @@ def pre_processor(mushroom: pd.DataFrame) -> pd.DataFrame:
     for col in categorical_cols:
         mushroom[col].fillna('Desconhecido', inplace=True)
     mushroom[numerical_cols] = imputer.transform(mushroom[numerical_cols])
-    # Need Fix
-    for col in categorical_cols:
-        mushroom[col] = label_encoder.transform(mushroom[col])
+    for encoder in label_encoder:
+        col: str = encoder[0]
+        le: LabelEncoder = encoder[1]
+        mushroom[col] = le.transform(mushroom[col])
     mushroom[categorical_cols] = cat_scaler.transform(mushroom[categorical_cols])
-    mushroom[numerical_cols] = cat_scaler.transform(mushroom[numerical_cols])
+    mushroom[numerical_cols] = num_scaler.transform(mushroom[numerical_cols])
     return mushroom
