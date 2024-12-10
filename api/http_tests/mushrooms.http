@@ -37,3 +37,31 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbGljZUBle
   "habitat": "w",
   "season": "u"
 }
+
+###
+POST http://localhost:8000/mushrooms/mock-predict
+Content-Type: application/json
+
+{
+  "mushroom_class": "e",
+  "cap_diameter": 7.2,
+  "cap_shape": "x",
+  "cap_surface": "s",
+  "cap_color": "b",
+  "does_bruise_bleed": "f",
+  "gill_attachment": "a",
+  "gill_spacing": "c",
+  "gill_color": "w",
+  "stem_height": 9.5,
+  "stem_width": 1.5,
+  "stem_root": "e",
+  "stem_surface": "i",
+  "stem_color": "n",
+  "veil_type": "p",
+  "veil_color": "w",
+  "has_ring": "t",
+  "ring_type": "p",
+  "spore_print_color": "o",
+  "habitat": "w",
+  "season": "u"
+}

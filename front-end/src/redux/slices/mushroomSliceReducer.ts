@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import mushroomService from "../../services/mushrooms.client";
-import {MushroomDTO, MushroomPageResponse} from "../../types/mushroom";
+import {MushroomDTO, MushroomPageResponse, MushroomPredictionDTO} from "../../types/mushroom";
 
 
 export interface MushroomState {
@@ -30,6 +30,14 @@ export const insertMushroom = createAsyncThunk(
         return response.data;
     }
 );
+
+export const predictMushroom = createAsyncThunk(
+    "mushroom/predictMushroom",
+    async (payload: MushroomDTO): Promise<MushroomPredictionDTO> => {
+        const response = await mushroomService.predictMushroom(payload);
+        return response.data;
+    }
+)
 
 const mushroomSlice = createSlice({
     name: "mushroom",

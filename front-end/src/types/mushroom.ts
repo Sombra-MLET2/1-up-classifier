@@ -354,4 +354,9 @@ export const SeasonEnumToString: Record<SeasonEnum, string> = {
     [SeasonEnum.winter]: "Winter",
 };
 
+export interface MushroomPredictionDTO {
+    mushroom: MushroomDTO;
+    edible: boolean;
+}
+
 export default Mushroom;

@@ -1,3 +1,4 @@
+from random import Random
 from typing import List, Union, Annotated
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
@@ -79,3 +80,13 @@ async def predict(mushroom_id: int, db_con: Session = Depends(get_db)):
     #    return predict_mushroom_by_id(db_con, mushroom_id)
     #except Exception as e:
     #    raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")
+
+
+@mushrooms_router.post(path="/mock-predict", summary="Remove later")
+async def mock_predict(dto: MushroomDTO):
+    print(f'Received mushroom to predict: {dto}')
+
+    return {
+        'mushroom': dto,
+        'edible': Random().choice([True, False])
+    }
