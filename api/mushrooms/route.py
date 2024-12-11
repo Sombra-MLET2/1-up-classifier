@@ -5,7 +5,7 @@ from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse, StreamingResponse
 from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse, User, \
-    MushroomSearchRequest
+    MushroomSearchRequest, MushroomPredictionResponse
 from api.infra.database import get_db
 from api.infra.security import get_current_active_user
 from api.mushrooms.create_mushroom import save_mushroom
@@ -93,15 +93,12 @@ async def predict_all(db_con: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")
 
 
-@mushrooms_router.post(path="/mock-predict", summary="Remove later")
-async def mock_predict(dto: MushroomDTO):
+@mushrooms_router.post(path="/predict/live", summary="Live prediction with user input")
+async def mock_predict(dto: MushroomDTO) -> MushroomPredictionResponse:
     print(f'Received mushroom to predict: {dto}')
 
     mush_df = map_dto_to_df([dto])
 
     pred = predict_mushroom(mush_df)
 
-    return {
-        'mushroom': dto,
-        'edible': False if pred[0] == 1 else True
-    }
+    return MushroomPredictionResponse(mushroom=dto, edible=False if pred[0] == 1 else True)

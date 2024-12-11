@@ -20,7 +20,7 @@ const insertMushroom = async (mushroom: MushroomDTO, token: string) => {
 };
 
 const predictMushroom = async (mushroom: MushroomDTO) => {
-    return await axios.post(`${API_URL}/mushrooms/mock-predict`, mushroom);
+    return await axios.post(`${API_URL}/mushrooms/predict/live`, mushroom);
 }
 
 export default {

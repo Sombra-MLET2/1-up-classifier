@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field, EmailStr, PositiveInt
 from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEnum, DoesBruiseBleedEnum, \
     GillAttachmentEnum, GillSpacingEnum, StemRootEnum, VeilTypeEnum, RingTypeEnum, HabitatEnum, SeasonEnum
@@ -47,6 +47,11 @@ class MushroomPageResponse(BaseModel):
 
 class MushroomSimpleResponse(BaseModel):
     message: str | None = None
+
+
+class MushroomPredictionResponse(BaseModel):
+    mushroom: MushroomDTO
+    edible: bool
 
 
 class MushroomSearchRequest(BaseModel):
