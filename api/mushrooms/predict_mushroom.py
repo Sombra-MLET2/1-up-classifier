@@ -46,7 +46,7 @@ def pre_processor(mushroom: pd.DataFrame) -> pd.DataFrame:
     cat_scaler: MinMaxScaler = joblib.load("ml-models/transform/CatScaler.gz")
     num_scaler = joblib.load("ml-models/transform/NumScaler.gz")
 
-    mushroom.drop(columns=drop_cols, inplace=True)
+    mushroom.drop(columns=drop_cols, inplace=True, errors='ignore')
     mushroom.rename(columns=rename_cols, inplace=True)
     categorical_cols = mushroom.select_dtypes(include='object').columns
     numerical_cols = mushroom.select_dtypes(include='float64').columns

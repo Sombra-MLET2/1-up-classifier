@@ -12,6 +12,9 @@ from api.mushrooms.create_mushroom import save_mushroom
 from api.mushrooms.delete_mushrooms import delete_mushrooms
 from api.mushrooms.list_mushrooms import list_all_mushrooms
 from api.mushrooms.predict_mushroom import predict_mushroom_by_id, predict_mushroom_all
+from api.mushrooms.predict_mushroom import predict_mushroom_by_id
+from api.utils import map_dto_to_df
+from api.mushrooms.predict_mushroom import predict as predict_mushroom
 
 mushrooms_router = APIRouter(
     prefix="/mushrooms",
@@ -92,7 +95,8 @@ async def predict_all(db_con: Session = Depends(get_db)):
 @mushrooms_router.post(path="/mock-predict", summary="Remove later")
 async def mock_predict(dto: MushroomDTO):
     print(f'Received mushroom to predict: {dto}')
-    return {
-        'mushroom': dto,
-        'edible': Random().choice([True, False])
-    }
+
+    mush_df = map_dto_to_df([dto])
+    print(f'Mapped mushroom to predict: \n{mush_df.columns}\n{mush_df.values}')
+
+    return predict_mushroom(mush_df)

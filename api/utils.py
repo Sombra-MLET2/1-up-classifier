@@ -1,3 +1,5 @@
+from typing import List
+
 import pandas as pd
 
 from api.dtos import MushroomDTO
@@ -5,6 +7,14 @@ from api.infra.loggers import logger
 from api.models.enums import ClassEnum, CapShapeEnum, CapSurfaceEnum, CapColorEnum, DoesBruiseBleedEnum, \
     GillAttachmentEnum, GillSpacingEnum, StemRootEnum, VeilTypeEnum, RingTypeEnum, HabitatEnum, SeasonEnum
 from api.models.mushroom import Mushroom
+
+
+drop_cols = ['id','mushroom_class', 'stem_root', 'stem_surface', 'veil_type', 'veil_color', 'spore_print_color', 'created_at', 'user']
+rename_cols = {"mushroom_class": "class", "cap_diameter": "cap-diameter", "stem_height": "stem-height",
+               "stem_width": "stem-width", "cap_shape": "cap-shape", "cap_surface": "cap-surface",
+               "cap_color": "cap-color", "does_bruise_bleed": "does-bruise-or-bleed",
+               "gill_attachment": "gill-attachment", "gill_spacing": "gill-spacing", "gill_color": "gill-color",
+               "stem_color": "stem-color", "has_ring": "has-ring", "ring_type": "ring-type"}
 
 
 def _handle_row_enum_field(row, mush_enum, field):
@@ -86,3 +96,9 @@ def map_dto_to_mushroom(dto: MushroomDTO) -> Mushroom:
         season=_handle_dto_enum_field(dto.season, SeasonEnum),
         user=dto.user
     )
+
+def map_dto_to_df(data: List[MushroomDTO]) -> pd.DataFrame:
+
+    data_dicts = [dto.dict() for dto in data]
+
+    return pd.DataFrame(data_dicts)

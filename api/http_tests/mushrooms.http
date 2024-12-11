@@ -43,7 +43,6 @@ POST http://localhost:8000/mushrooms/mock-predict
 Content-Type: application/json
 
 {
-  "mushroom_class": "e",
   "cap_diameter": 7.2,
   "cap_shape": "x",
   "cap_surface": "s",
