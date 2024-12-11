@@ -97,6 +97,10 @@ async def mock_predict(dto: MushroomDTO):
     print(f'Received mushroom to predict: {dto}')
 
     mush_df = map_dto_to_df([dto])
-    print(f'Mapped mushroom to predict: \n{mush_df.columns}\n{mush_df.values}')
 
-    return predict_mushroom(mush_df)
+    pred = predict_mushroom(mush_df)
+
+    return {
+        'mushroom': dto,
+        'edible': False if pred[0] == 1 else True
+    }

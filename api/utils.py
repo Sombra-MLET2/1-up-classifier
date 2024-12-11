@@ -99,6 +99,9 @@ def map_dto_to_mushroom(dto: MushroomDTO) -> Mushroom:
 
 def map_dto_to_df(data: List[MushroomDTO]) -> pd.DataFrame:
 
-    data_dicts = [dto.dict() for dto in data]
+    data_dicts = []
+    for dto in data:
+        dto.mushroom_class = ClassEnum.poisonous
+        data_dicts.append(dto.dict())
 
     return pd.DataFrame(data_dicts)

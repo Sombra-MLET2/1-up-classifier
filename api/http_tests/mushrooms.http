@@ -64,3 +64,30 @@ Content-Type: application/json
   "habitat": "w",
   "season": "u"
 }
+
+### Failed
+POST http://localhost:8000/mushrooms/mock-predict
+Content-Type: application/json
+
+{
+  "cap_diameter": 4.3,
+  "stem_height": 7.7,
+  "stem_width": 9.9,
+  "cap_shape": "x",
+  "cap_color": "p",
+  "gill_spacing": "d",
+  "stem_color": "p",
+  "has_ring": "f",
+  "habitat": "h",
+  "ring_type": "s",
+  "gill_color": "b",
+  "does_bruise_bleed": "f",
+  "stem_root": "c",
+  "veil_type": "u",
+  "season": "a",
+  "cap_surface": "y",
+  "gill_attachment": "d",
+  "stem_surface": "s",
+  "veil_color": "w",
+  "spore_print_color": "r"
+}
