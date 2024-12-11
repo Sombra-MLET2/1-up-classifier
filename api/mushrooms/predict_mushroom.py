@@ -1,12 +1,13 @@
 import joblib
 import pandas as pd
 from enum import Enum
-from api.dtos import MushroomDTO, MushroomSearchRequest
+from api.dtos import MushroomDTO
 from sqlalchemy.orm import Session
-from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.impute import SimpleImputer
-from api.repositories.mushroom_repository import df_find_mushrooms_by_id, df_find_all_mushrooms, find_mushrooms_by_id, find_mushrooms_all
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from api.repositories.mushroom_repository import (df_find_mushrooms_by_id, df_find_all_mushrooms, find_mushrooms_by_id,
+                                                  find_mushrooms_all)
 
 drop_cols = ['id', 'stem_root', 'stem_surface', 'veil_type', 'veil_color', 'spore_print_color', 'created_at', 'user']
 rename_cols = {"mushroom_class": "class", "cap_diameter": "cap-diameter", "stem_height": "stem-height",
@@ -70,7 +71,7 @@ def format_response(result: [], data: []):
     for (result_item, data_item) in zip(result, data):
         aux = {
             'mushroom': MushroomDTO.model_validate(data_item),
-            'edible': True if result_item == 1 else False
+            'edible': True if result_item == 0 else False
         }
         result_list.append(aux)
     return {'result': result_list}

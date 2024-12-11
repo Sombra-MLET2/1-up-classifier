@@ -1,9 +1,9 @@
-from random import Random
+from io import StringIO
 from typing import List, Union, Annotated
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, StreamingResponse
 from api.dtos import MushroomDTO, MushroomDeleteRequest, MushroomPageResponse, MushroomSimpleResponse, User, \
     MushroomSearchRequest
 from api.infra.database import get_db
@@ -12,7 +12,6 @@ from api.mushrooms.create_mushroom import save_mushroom
 from api.mushrooms.delete_mushrooms import delete_mushrooms
 from api.mushrooms.list_mushrooms import list_all_mushrooms
 from api.mushrooms.predict_mushroom import predict_mushroom_by_id, predict_mushroom_all
-from api.mushrooms.predict_mushroom import predict_mushroom_by_id
 from api.utils import map_dto_to_df
 from api.mushrooms.predict_mushroom import predict as predict_mushroom
 
@@ -84,10 +83,12 @@ async def predict(mushroom_id: int, db_con: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")
 
 
-@mushrooms_router.post(path="/predict-all", summary="predict all")
+@mushrooms_router.post(path="/predict-all", summary="Return a file with all predictions")
 async def predict_all(db_con: Session = Depends(get_db)):
     try:
-        return predict_mushroom_all(db_con)
+        file = StringIO(str(predict_mushroom_all(db_con)))
+        return StreamingResponse(file, media_type="text/plain",
+                                 headers={"Content-Disposition": "attachment; filename=result.txt"})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")
 
