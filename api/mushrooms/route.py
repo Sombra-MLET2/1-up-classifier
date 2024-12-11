@@ -11,7 +11,7 @@ from api.infra.security import get_current_active_user
 from api.mushrooms.create_mushroom import save_mushroom
 from api.mushrooms.delete_mushrooms import delete_mushrooms
 from api.mushrooms.list_mushrooms import list_all_mushrooms
-from api.mushrooms.predict_mushroom import predict_mushroom_by_id
+from api.mushrooms.predict_mushroom import predict_mushroom_by_id, predict_mushroom_all
 
 mushrooms_router = APIRouter(
     prefix="/mushrooms",
@@ -73,19 +73,25 @@ def _serialize_mushrooms(mushrooms: List[MushroomDTO]) -> List[dict]:
     return [mushroom.__dict__ for mushroom in mushrooms]
 
 
-@mushrooms_router.post(path="/predict/", summary="predict")
+@mushrooms_router.post(path="/predict", summary="predict")
 async def predict(mushroom_id: int, db_con: Session = Depends(get_db)):
-    return predict_mushroom_by_id(db_con, mushroom_id)
-    #try:
-    #    return predict_mushroom_by_id(db_con, mushroom_id)
-    #except Exception as e:
-    #    raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")
+    try:
+        return predict_mushroom_by_id(db_con, mushroom_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")
+
+
+@mushrooms_router.post(path="/predict-all", summary="predict all")
+async def predict_all(db_con: Session = Depends(get_db)):
+    try:
+        return predict_mushroom_all(db_con)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction has failed: {str(e)}")
 
 
 @mushrooms_router.post(path="/mock-predict", summary="Remove later")
 async def mock_predict(dto: MushroomDTO):
     print(f'Received mushroom to predict: {dto}')
-
     return {
         'mushroom': dto,
         'edible': Random().choice([True, False])

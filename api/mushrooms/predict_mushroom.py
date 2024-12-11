@@ -1,10 +1,11 @@
 import joblib
 import pandas as pd
 from enum import Enum
+from api.dtos import MushroomDTO, MushroomSearchRequest
 from sqlalchemy.orm import Session
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.impute import SimpleImputer
-from api.repositories.mushroom_repository import df_find_mushrooms_by_id, df_find_all_mushrooms
+from api.repositories.mushroom_repository import df_find_mushrooms_by_id, df_find_all_mushrooms, find_mushrooms_by_id, find_mushrooms_all
 from sklearn.ensemble import RandomForestClassifier
 
 drop_cols = ['id', 'stem_root', 'stem_surface', 'veil_type', 'veil_color', 'spore_print_color', 'created_at', 'user']
@@ -16,15 +17,17 @@ rename_cols = {"mushroom_class": "class", "cap_diameter": "cap-diameter", "stem_
 
 
 def predict_mushroom_by_id(db_con: Session, id: int):
-    mushroom = df_find_mushrooms_by_id(db_con, id)
-    result = predict(mushroom)
-    return format_response(db_con, result, 0, id)
+    df_mushroom = df_find_mushrooms_by_id(db_con, id)
+    mushroom = find_mushrooms_by_id(db_con, id)
+    result = predict(df_mushroom)
+    return format_response(result, mushroom)
 
 
 def predict_mushroom_all(db_con: Session):
-    mushroom = df_find_all_mushrooms(db_con)
-    result = predict(mushroom)
-    return format_response(db_con, result, 1, 0)
+    df_mushroom = df_find_all_mushrooms(db_con)
+    mushroom = find_mushrooms_all(db_con)
+    result = predict(df_mushroom)
+    return format_response(result, mushroom)
 
 
 def predict(mushroom: pd.DataFrame):
@@ -62,13 +65,12 @@ def pre_processor(mushroom: pd.DataFrame) -> pd.DataFrame:
     return mushroom
 
 
-def format_response(db_con: Session, result, type: int, id: int):
-    response = {}
-    if type == 0:
-        response = {'mushroom': id,
-                    'edible': True if result[0] == 1 else False
-                    }
-    else:
-        response = {"erro": 0}
-    return response
-
+def format_response(result: [], data: []):
+    result_list = []
+    for (result_item, data_item) in zip(result, data):
+        aux = {
+            'mushroom': MushroomDTO.model_validate(data_item),
+            'edible': True if result_item == 1 else False
+        }
+        result_list.append(aux)
+    return {'result': result_list}

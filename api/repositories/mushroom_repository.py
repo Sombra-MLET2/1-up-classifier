@@ -22,7 +22,7 @@ def df_find_mushrooms_by_id(db_con: Session, id: int) -> pd.DataFrame:
 
 
 def df_find_all_mushrooms(db_con: Session) -> pd.DataFrame:
-    query = db_con.query(Mushroom).statement
+    query = db_con.query(Mushroom).statement.order_by(Mushroom.id)
     return pd.read_sql(query, db_con.bind)
 
 
@@ -47,6 +47,14 @@ def find_mushrooms(db_con: Session, params: MushroomSearchRequest, page, size):
         query = query.where(Mushroom.season == prepare_enum(SeasonEnum, params.season))
 
     return query.order_by(Mushroom.created_at).offset(page).limit(size)
+
+
+def find_mushrooms_by_id(db_con: Session, id: int):
+    return db_con.query(Mushroom).where(Mushroom.id == id).all()
+
+
+def find_mushrooms_all(db_con: Session):
+    return db_con.query(Mushroom).order_by(Mushroom.id).all()
 
 
 def save_mushrooms(db_con: Session, mushrooms: list[Mushroom]):
