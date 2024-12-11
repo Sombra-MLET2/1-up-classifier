@@ -16,8 +16,12 @@ cd ../api/
 
 docker build -t sombra/mushroom-back:latest .
 
-echo "Done. Starting compose enviromnent..."
+echo "Done. Starting compose environment..."
 
 cd ../deployment/
 
-docker-compose up
+docker-compose up -d
+
+sleep 5
+
+echo "Mushroom Safety Classifier at live: http://localhost:3001/"
