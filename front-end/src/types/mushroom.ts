@@ -82,9 +82,7 @@ export enum VeilTypeEnum {
     partial = "p",
     universal = "u",
 }
-// gill-color ['b' 'e' 'f' 'g' 'k' 'n' 'o' 'p' 'r' 'u' 'w' 'y']
-// stem-color ['b' 'e' 'f' 'g' 'k' 'l' 'n' 'o' 'p' 'r' 'u' 'w' 'y']
-// ring-type ['Desconhecido' 'e' 'f' 'g' 'l' 'm' 'p' 'r' 'z']
+
 export enum RingTypeEnum {
     // cobwebby = "c", Not in training dataset
     evanescent = "e",

@@ -1,6 +1,6 @@
 import React, {useState, FormEvent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Button, TextField, Box, Menu, Alert} from '@mui/material';
+import {Button, TextField, Box, Alert} from '@mui/material';
 import {AppDispatch, RootState} from '../redux/storeInitializer';
 import {login} from '../redux/slices/sessionSliceReducer';
 

@@ -1,11 +1,11 @@
 import React, {useState, FormEvent, ReactNode, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-    Box, TextField, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slider, Alert, Typography
+    Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slider, Alert, Typography
 } from '@mui/material';
 import {insertMushroom} from '../redux/slices/mushroomSliceReducer';
 import {AppDispatch, RootState} from '../redux/storeInitializer';
-import mushroom, {
+import {
     MushroomDTO,
     CapShapeEnum,
     CapSurfaceEnum,
