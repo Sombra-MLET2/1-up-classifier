@@ -62,8 +62,6 @@ const MushroomPredict: React.FC = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        console.log("Checking type: ", mushroom);
-
         try {
             const response = await dispatch(predictMushroom(mushroom as MushroomDTO));
 
@@ -78,6 +76,11 @@ const MushroomPredict: React.FC = () => {
         } catch (err) {
             setPredictionError(true);
             console.error("Prediction request failed: ", err);
+        } finally {
+            setTimeout(() =>{
+                setPrediction(null);
+                setPredictionError(false);
+            }, 3500);
         }
     }
 
