@@ -17,12 +17,14 @@ rename_cols = {"mushroom_class": "class", "cap_diameter": "cap-diameter", "stem_
 
 def predict_mushroom_by_id(db_con: Session, id: int):
     mushroom = df_find_mushrooms_by_id(db_con, id)
-    return predict(mushroom)
+    result = predict(mushroom)
+    return format_response(db_con, result, 0, id)
 
 
 def predict_mushroom_all(db_con: Session):
     mushroom = df_find_all_mushrooms(db_con)
-    return predict(mushroom)
+    result = predict(mushroom)
+    return format_response(db_con, result, 1, 0)
 
 
 def predict(mushroom: pd.DataFrame):
@@ -56,4 +58,17 @@ def pre_processor(mushroom: pd.DataFrame) -> pd.DataFrame:
         mushroom[col] = le.transform(mushroom[col])
     mushroom[categorical_cols] = cat_scaler.transform(mushroom[categorical_cols])
     mushroom[numerical_cols] = num_scaler.transform(mushroom[numerical_cols])
+    mushroom.drop(columns=['class'], inplace=True)
     return mushroom
+
+
+def format_response(db_con: Session, result, type: int, id: int):
+    response = {}
+    if type == 0:
+        response = {'mushroom': id,
+                    'edible': True if result[0] == 1 else False
+                    }
+    else:
+        response = {"erro": 0}
+    return response
+
