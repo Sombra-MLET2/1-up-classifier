@@ -44,6 +44,7 @@ class CapColorEnum(enum.Enum):
     blue = "l"
     orange = "o"
     black = "k"
+    none = "f"
 
 
 class DoesBruiseBleedEnum(enum.Enum):
