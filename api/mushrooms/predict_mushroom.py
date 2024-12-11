@@ -71,7 +71,7 @@ def format_response(result: [], data: []):
     for (result_item, data_item) in zip(result, data):
         aux = {
             'mushroom': MushroomDTO.model_validate(data_item),
-            'edible': True if result_item == 1 else False
+            'edible': True if result_item == 0 else False
         }
         result_list.append(aux)
     return {'result': result_list}
