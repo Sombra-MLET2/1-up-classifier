@@ -59,7 +59,7 @@ export enum GillAttachmentEnum {
     sinuate = "s",
     pores = "p",
     none = "f",
-    unknown = "?",
+    // unknown = "?", not in training dataset
 }
 
 export enum GillSpacingEnum {
@@ -82,20 +82,22 @@ export enum VeilTypeEnum {
     partial = "p",
     universal = "u",
 }
-
+// gill-color ['b' 'e' 'f' 'g' 'k' 'n' 'o' 'p' 'r' 'u' 'w' 'y']
+// stem-color ['b' 'e' 'f' 'g' 'k' 'l' 'n' 'o' 'p' 'r' 'u' 'w' 'y']
+// ring-type ['Desconhecido' 'e' 'f' 'g' 'l' 'm' 'p' 'r' 'z']
 export enum RingTypeEnum {
-    cobwebby = "c",
+    // cobwebby = "c", Not in training dataset
     evanescent = "e",
     flaring = "r",
     grooved = "g",
     large = "l",
     pendant = "p",
-    sheathing = "s",
+    // sheathing = "s",
     zone = "z",
-    scaly = "y",
+    // scaly = "y",
     movable = "m",
     none = "f",
-    unknown = "?",
+    // unknown = "?",
 }
 
 export enum HabitatEnum {
@@ -297,7 +299,7 @@ export const GillAttachmentEnumToString: Record<GillAttachmentEnum, string> = {
     [GillAttachmentEnum.sinuate]: "Sinuate",
     [GillAttachmentEnum.pores]: "Pores",
     [GillAttachmentEnum.none]: "None",
-    [GillAttachmentEnum.unknown]: "Unknown",
+    // [GillAttachmentEnum.unknown]: "Unknown",
 };
 
 export const GillSpacingEnumToString: Record<GillSpacingEnum, string> = {
@@ -322,18 +324,18 @@ export const VeilTypeEnumToString: Record<VeilTypeEnum, string> = {
 };
 
 export const RingTypeEnumToString: Record<RingTypeEnum, string> = {
-    [RingTypeEnum.cobwebby]: "Cobwebby",
+    // [RingTypeEnum.cobwebby]: "Cobwebby",
     [RingTypeEnum.evanescent]: "Evanescent",
     [RingTypeEnum.flaring]: "Flaring",
     [RingTypeEnum.grooved]: "Grooved",
     [RingTypeEnum.large]: "Large",
     [RingTypeEnum.pendant]: "Pendant",
-    [RingTypeEnum.sheathing]: "Sheathing",
+    // [RingTypeEnum.sheathing]: "Sheathing",
     [RingTypeEnum.zone]: "Zone",
-    [RingTypeEnum.scaly]: "Scaly",
+    // [RingTypeEnum.scaly]: "Scaly",
     [RingTypeEnum.movable]: "Movable",
     [RingTypeEnum.none]: "None",
-    [RingTypeEnum.unknown]: "Unknown",
+    // [RingTypeEnum.unknown]: "Unknown",
 };
 
 export const HabitatEnumToString: Record<HabitatEnum, string> = {
