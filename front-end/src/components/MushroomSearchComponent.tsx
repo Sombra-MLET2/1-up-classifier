@@ -64,6 +64,10 @@ const MushroomSearch: React.FC = () => {
             <Typography variant="h4" component="h1" align="center" gutterBottom>
                 Mushroom Search
             </Typography>
+            <Typography variant="subtitle1" align="center" sx={{mb: 4, color: 'text.secondary'}}>
+                Search for mushrooms by filtering their main attributes. Search results are capped at 100 results.
+                Narrow your search by selecting the desired attributes.
+            </Typography>
             <Box>
                 <Box
                     component="form"

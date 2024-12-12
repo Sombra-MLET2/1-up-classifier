@@ -57,7 +57,7 @@ const MenuBar: React.FC = () => {
             <LoadingModal/>
             <Toolbar>
                 <Box sx={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                    <img src={Logo} alt="Logo" style={{maxWidth: '50px', maxHeight: '50px', marginRight: '10px'}}/>
+                    <img src={Logo} alt="Logo" style={{maxWidth: '50px', maxHeight: '50px', marginRight: '10px', cursor: 'pointer'}} onClick={() => navigate('/')} />
                     <Typography variant="h6">
                         Safety Classifier
                     </Typography>
@@ -111,7 +111,9 @@ const MenuBar: React.FC = () => {
                 </Box>
                 <Box sx={{flexGrow: 1}}/>
                 <Box>
-                    <Button color="inherit" onClick={handleLogoff}>Logoff</Button>
+                    {session.status === 'succeeded' && (
+                        <Button color="inherit" onClick={handleLogoff}>Logoff</Button>
+                    )}
                 </Box>
             </Toolbar>
         </AppBar>

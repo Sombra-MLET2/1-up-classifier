@@ -77,7 +77,7 @@ const MushroomPredict: React.FC = () => {
             setPredictionError(true);
             console.error("Prediction request failed: ", err);
         } finally {
-            setTimeout(() =>{
+            setTimeout(() => {
                 setPrediction(null);
                 setPredictionError(false);
             }, 3500);
@@ -90,6 +90,10 @@ const MushroomPredict: React.FC = () => {
             <MenuBar/>
             <Typography variant="h4" component="h1" align="center" gutterBottom>
                 Mushroom Safety Prediction
+            </Typography>
+            <Typography variant="subtitle1" align="center" sx={{mb: 4, color: 'text.secondary'}}>
+                A preliminary screening service to help identify potentially dangerous mushrooms - always verify with
+                specialists.
             </Typography>
             <Box sx={{
                 display: 'flex',
@@ -117,7 +121,7 @@ const MushroomPredict: React.FC = () => {
                 )}
                 {predictionError && (
                     <Alert icon="❓" severity='warning'>
-                        <AlertTitle style={{fontWeight: 'bold'}}>Prediction Failed</AlertTitle>
+                        <AlertTitle style={{fontWeight: 'bold'}}>Unable to Make Prediction</AlertTitle>
                         <span style={{fontWeight: 'bolder'}}>Avoid consumption at all costs.</span><br/>
                         Our prediction service is currently unavailable. Please, try again later.
                     </Alert>

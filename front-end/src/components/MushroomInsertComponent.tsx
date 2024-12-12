@@ -77,6 +77,10 @@ const MushroomInsert: React.FC = () => {
             <Typography variant="h4" component="h1" align="center" gutterBottom>
                 Mushroom Register
             </Typography>
+            <Typography variant="subtitle1" align="center" sx={{mb: 4, color: 'text.secondary'}}>
+                Help build our mushroom database by documenting mushroom specimens with detailed characteristics.
+            </Typography>
+
             <Box sx={{display: 'flex', alignItems: 'center', marginBottom: '20px'}}>
                 {addedMushroom === 'failed' && (
                     <Alert severity='error'>Mushroom creation failed. Please, try again later.</Alert>
