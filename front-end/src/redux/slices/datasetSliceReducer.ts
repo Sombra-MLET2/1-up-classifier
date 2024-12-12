@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import dsServices from "../../services/datasets.client";
+import mushroomServices from "../../services/mushrooms.client";
 
 interface DatasetState {
   loading: boolean;
@@ -25,6 +26,15 @@ export const deleteDataset = createAsyncThunk(
   'dataset/delete',
   async (token: string): Promise<{ message: string }> => {
     const response = await dsServices.deleteDataset(token);
+    return response.data;
+  }
+);
+
+
+export const batchPredict = createAsyncThunk(
+  'dataset/batch-predict',
+  async () => {
+    const response = await mushroomServices.batchPredictMushroom();
     return response.data;
   }
 );
@@ -63,6 +73,19 @@ const datasetSlice = createSlice({
       state.message = action.payload.message;
     });
     builder.addCase(deleteDataset.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || 'Something went wrong';
+    });
+    builder.addCase(batchPredict.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    });
+    builder.addCase(batchPredict.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    });
+    builder.addCase(batchPredict.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || 'Something went wrong';
     });

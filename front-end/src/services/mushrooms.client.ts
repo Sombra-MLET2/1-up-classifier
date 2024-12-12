@@ -23,8 +23,14 @@ const predictMushroom = async (mushroom: MushroomDTO) => {
     return await axios.post(`${API_URL}/mushrooms/predict/live`, mushroom);
 }
 
+
+const batchPredictMushroom = async () => {
+    return await axios.post(`${API_URL}/mushrooms/predict-all`);
+}
+
 export default {
     fetchMushrooms,
     insertMushroom,
-    predictMushroom
+    predictMushroom,
+    batchPredictMushroom
 };

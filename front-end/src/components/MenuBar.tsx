@@ -1,13 +1,12 @@
-import React from 'react';
-import {AppBar, Toolbar, Typography, Menu, MenuItem, Button, Box} from '@mui/material';
-import {useState} from 'react';
+import React, {useState} from 'react';
+import {AppBar, Box, Button, Menu, MenuItem, Toolbar, Typography} from '@mui/material';
 import {Link, useNavigate} from 'react-router-dom';
 
 // @ts-ignore
 import Logo from '../assets/1up.png';
 import LoadingModal from "./LoadingModal";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteDataset, importDataset} from "../redux/slices/datasetSliceReducer";
+import {batchPredict, deleteDataset, importDataset} from "../redux/slices/datasetSliceReducer";
 import {AppDispatch, RootState} from "../redux/storeInitializer";
 import {MushroomDTO} from "../types/mushroom";
 import {fetchMushrooms} from "../redux/slices/mushroomSliceReducer";
@@ -47,6 +46,24 @@ const MenuBar: React.FC = () => {
         handleMenuClose()
     };
 
+    const handleBatchPredict = async () => {
+        try {
+            const fileData = await dispatch(batchPredict()).unwrap();
+            const blob = new Blob([fileData], {type: 'application/octet-stream'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'batch-prediction-results.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Batch prediction failed:', error);
+            alert('Failed to download batch prediction results. Please try again.');
+        } finally {
+            handleMenuClose();
+        }
+    };
+
     const handleLogoff = () => {
         dispatch(logoff());
         navigate('/', {replace: true});
@@ -57,7 +74,9 @@ const MenuBar: React.FC = () => {
             <LoadingModal/>
             <Toolbar>
                 <Box sx={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                    <img src={Logo} alt="Logo" style={{maxWidth: '50px', maxHeight: '50px', marginRight: '10px', cursor: 'pointer'}} onClick={() => navigate('/')} />
+                    <img src={Logo} alt="Logo"
+                         style={{maxWidth: '50px', maxHeight: '50px', marginRight: '10px', cursor: 'pointer'}}
+                         onClick={() => navigate('/')}/>
                     <Typography variant="h6">
                         Safety Classifier
                     </Typography>
@@ -107,6 +126,7 @@ const MenuBar: React.FC = () => {
                         {session.status === 'succeeded' && (
                             <MenuItem onClick={handleMenuClose} component={Link} to="/insert">Insert</MenuItem>
                         )}
+                        <MenuItem onClick={handleBatchPredict}>Batch Predict</MenuItem>
                     </Menu>
                 </Box>
                 <Box sx={{flexGrow: 1}}/>
